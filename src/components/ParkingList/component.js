@@ -5,22 +5,23 @@ import ParkingItem from '../ParkingItem';
 
 class ParkingList extends Component {
 
-render() {
-  const { parkings, onParkingSelect } = this.props;
+  render() {
+    const { parkings, onParkingSelect } = this.props;
 
-  return (
-    <div className="parking-list">
-      {parkings.map((parking, index) => (
-        <ParkingItem
-          key={parking['@id']}
-          parking={parking}
-          index={index}
-          onParkingSelect={onParkingSelect}
-        />
-      ))}
-    </div>
-  );
-}
+    return (
+      <div className="parking-list">
+        {parkings.map((parking, index) => (
+          <ParkingItem
+            className="parking-item"
+            key={parking['@id']}
+            parking={parking}
+            index={index}
+            onParkingSelect={onParkingSelect}
+          />
+        ))}
+      </div>
+    );
+  }
 }
 
 export default ParkingList;

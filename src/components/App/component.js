@@ -15,6 +15,7 @@ class App extends Component {
       .then( res => res.json())
       .then(data => this.setState({ parkings: data.features }));
   }
+
   onParkingSelect = (index) => {
     this.setState({ index });
   };
@@ -22,6 +23,7 @@ class App extends Component {
   render() {
     const { parkings, index } = this.state;
     const parking = parkings.length > 0 ? parkings[index] : null;
+
     return (
       <div className="App">
         <ParkingList parkings={parkings} onParkingSelect={this.onParkingSelect} />

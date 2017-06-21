@@ -1,20 +1,44 @@
+/*global google*/
 import React, { Component } from 'react';
 import './styles.css';
 
 class SelectedParking extends Component {
-  render() {
+  showMap () {
     const { parking } = this.props;
-    const FreeSpaceShort = parking.properties.layers['parking.garage'].data.FreeSpaceShort;
-    const FreeSpaceLong = parking.properties.layers['parking.garage'].data.FreeSpaceLong;
-    const ShortCapacity = parking.properties.layers['parking.garage'].data.ShortCapacity;
-    const LongCapacity = parking.properties.layers['parking.garage'].data.LongCapacity;
+    const { coordinates } = parking.geometry;
+    const position = { lat: coordinates[1], lng: coordinates[0] };
+    const { data } = parking.properties.layers['parking.garage'];
+    const contentInfoWindow = `
+      <div class="parking-capacity">Long: ${data.FreeSpaceLong}/${data.LongCapacity}</div>
+      <div class="parking-capacity">Short: ${data.FreeSpaceShort}/${data.ShortCapacity}</div>
+    `;
 
+    const map = new google.maps.Map(this.refs.map, {
+      center: position,
+      zoom: 13
+    });
+    const marker = new google.maps.Marker({ position, map });
+    console.log(parking);
+    const infowindow = new google.maps.InfoWindow({
+      content: contentInfoWindow
+    });
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  }
+
+  componentDidMount() {
+    this.showMap();
+  }
+
+  componentDidUpdate() {
+    this.showMap();
+  }
+
+  render() {
     return (
       <div className="selected-parking">
-        <span>FreeSpaceShort: {FreeSpaceShort} </span>
-        <span>FreeSpaceLong: {FreeSpaceLong} </span>
-        <span>ShortCapacity: {ShortCapacity} </span>
-        <span>LongCapacity: {LongCapacity} </span>
+        <div id="map" ref="map" />
       </div>
     );
   }
